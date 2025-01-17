@@ -42,7 +42,9 @@ async function run() {
 
     //cart item
     app.get('/carts', async (req, res) =>{
-      const result = await cartollection.find().toArray();
+      const email = req.query.email
+      const query = {email : email}
+      const result = await cartollection.find(query).toArray();
       res.send(result)
 
     })
