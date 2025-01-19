@@ -27,9 +27,9 @@ async function run() {
     await client.connect();
 
     const userCollection = client.db("MenuDB").collection("user");
-    const menuCollection = client.db("MenuDB").collection("menus");
-    const reviewCollection = client.db("MenuDB").collection("reviews");
-    const cartCollection = client.db("MenuDB").collection("carts");
+    const menuCollection = client.db("MenuDB").collection("Menus");
+    const reviewCollection = client.db("MenuDB").collection("Reviews");
+    const cartCollection = client.db("MenuDB").collection("cartItem");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
@@ -123,12 +123,13 @@ async function run() {
 
     app.get("/menu", async (req, res) => {
       const result = await menuCollection.find().toArray();
+
+      console.log(result.length)
       res.send(result);
     });
 
-    app.post('/menu', async (req, res) => {
+    app.post('/menu', verifyToken, verifyAdmin, async (req, res) => {
       const item = req.body
-      console.log(item)
       const result = await menuCollection.insertOne(item)
       res.send(result)
     })
